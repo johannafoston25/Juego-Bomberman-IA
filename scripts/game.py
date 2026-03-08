@@ -10,7 +10,7 @@ from scripts.sonidos import Sonidos
 class Game:
     def __init__(self):
         pygame.init()
-        self.screen = pygame.display.set_mode((800, 600))
+        self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
         pygame.display.set_caption("Bomberman IA")
         self.clock = pygame.time.Clock()
         self.running = True
@@ -18,7 +18,11 @@ class Game:
         # Aquí defino los estados del juego
         self.estado = "menu"
         self.gano = False
-        self.tile_size = 40
+        self.ancho = self.screen.get_width()
+        self.alto = self.screen.get_height()
+
+       # Aquí calculo el tile_size para que el mapa llene toda la pantalla
+        self.tile_size = max(self.ancho // 20, self.alto // 15)
 
         self.menu = Menu(self.screen)
         self.menu_gameover = MenuGameOver(self.screen)
@@ -32,9 +36,9 @@ class Game:
     def iniciar_juego(self):
         # Aquí reinicio todos los elementos del juego
         self.map = Map(self.tile_size)
-        self.player = Player(45, 45, 36)
+        self.player = Player(self.tile_size + 5, self.tile_size + 5, self.tile_size - 4)
         self.bombas = []
-        self.enemy = Enemy(680, 480, self.tile_size)
+        self.enemy = Enemy(self.tile_size * 17, self.tile_size * 12, self.tile_size)
 
     def verificar_colisiones(self):
         # Verifico si el enemigo tocó al jugador
@@ -86,6 +90,8 @@ class Game:
 
                 elif self.estado == "jugando":
                     if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_ESCAPE:
+                            self.running = False
                         if event.key == pygame.K_SPACE:
                             # Coloco una bomba y reproduzco el sonido
                             bomba = Bomb(self.player.x, self.player.y, self.tile_size)
@@ -100,7 +106,7 @@ class Game:
 
             elif self.estado == "jugando":
                 keys = pygame.key.get_pressed()
-                self.player.move(keys, 800, 600, self.map, self.tile_size)
+                self.player.move(keys, self.ancho, self.alto, self.map, self.tile_size)
 
                 dt = self.clock.get_time()
                 bombas_antes = len(self.bombas)
