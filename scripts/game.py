@@ -1,6 +1,7 @@
 # Johanna Foston 22-SISN-2-036
 import pygame
 from scripts.player import Player
+from scripts.map import Map
 
 class Game:
     def __init__(self):
@@ -10,10 +11,10 @@ class Game:
         self.clock = pygame.time.Clock()
         self.running = True
         self.tile_size = 40
-        self.rows = 15
-        self.cols = 20
+        
 
-        self.player = Player(100, 100, 36)
+        self.map = Map(self.tile_size)
+        self.player = Player(45, 45, 36)
 
     def run(self):
         while self.running:
@@ -24,21 +25,11 @@ class Game:
 
             # Movimiento del jugador
             keys = pygame.key.get_pressed()
-            self.player.move(keys, 800, 600)
+            self.player.move(keys, 800, 600, self.map, self.tile_size)
 
             # Dibujar fondo
             self.screen.fill((30, 30, 30))
-
-            # Dibujar grid
-            for row in range(self.rows):
-                for col in range(self.cols):
-                    rect = pygame.Rect(
-                        col * self.tile_size,
-                        row * self.tile_size,
-                        self.tile_size,
-                        self.tile_size
-                    )
-                    pygame.draw.rect(self.screen, (60, 60, 60), rect, 1)
+            self.map.draw(self.screen)
 
             # Dibujar jugador (Una sola vez, fuera del grid)
             self.player.draw(self.screen)
