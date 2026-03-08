@@ -5,6 +5,7 @@ from scripts.map import Map
 from scripts.bomb import Bomb
 from scripts.enemy import Enemy
 from scripts.menu import Menu, MenuGameOver
+from scripts.sonidos import Sonidos
 
 class Game:
     def __init__(self):
@@ -15,12 +16,16 @@ class Game:
         self.running = True
 
         # Aquí defino los estados del juego
-        self.estado = "menu"  # puede ser: menu, jugando, gameover
+        self.estado = "menu"
         self.gano = False
         self.tile_size = 40
 
         self.menu = Menu(self.screen)
         self.menu_gameover = MenuGameOver(self.screen)
+        self.sonidos = Sonidos()
+
+        # Aquí inicio la música de fondo
+        self.sonidos.iniciar_musica()
 
         self.iniciar_juego()
 
@@ -38,22 +43,23 @@ class Game:
 
         if jugador_rect.colliderect(enemigo_rect):
             self.gano = False
+            self.sonidos.reproducir_gameover()
             self.estado = "gameover"
 
         # Verifico si la explosión tocó al jugador o al enemigo
         for bomba in self.bombas:
             if bomba.mostrando_explosion:
                 for (r, c) in bomba.get_tiles_explosion():
-                    # Si la explosión toca al jugador pierde
                     jugador_row = self.player.y // self.tile_size
                     jugador_col = self.player.x // self.tile_size
                     if r == jugador_row and c == jugador_col:
                         self.gano = False
+                        self.sonidos.reproducir_gameover()
                         self.estado = "gameover"
 
-                    # Si la explosión toca al enemigo gana
                     if r == self.enemy.row and c == self.enemy.col:
                         self.gano = True
+                        self.sonidos.reproducir_gameover()
                         self.estado = "gameover"
 
     def run(self):
@@ -81,9 +87,10 @@ class Game:
                 elif self.estado == "jugando":
                     if event.type == pygame.KEYDOWN:
                         if event.key == pygame.K_SPACE:
-                            # Coloco una bomba donde está el jugador
+                            # Coloco una bomba y reproduzco el sonido
                             bomba = Bomb(self.player.x, self.player.y, self.tile_size)
                             self.bombas.append(bomba)
+                            self.sonidos.reproducir_bomba()
 
             if self.estado == "menu":
                 self.menu.dibujar()
@@ -92,23 +99,24 @@ class Game:
                 self.menu_gameover.dibujar(self.gano)
 
             elif self.estado == "jugando":
-                # Movimiento del jugador
                 keys = pygame.key.get_pressed()
                 self.player.move(keys, 800, 600, self.map, self.tile_size)
 
-                # Actualizo y limpio las bombas que ya terminaron
                 dt = self.clock.get_time()
+                bombas_antes = len(self.bombas)
                 self.bombas = [b for b in self.bombas if b.explosion_timer > 0 or not b.explotada]
+                bombas_despues = len(self.bombas)
+
                 for bomba in self.bombas:
+                    explotada_antes = bomba.explotada
                     bomba.update(dt, self.map)
+                    # Reproduzco sonido cuando explota
+                    if not explotada_antes and bomba.explotada:
+                        self.sonidos.reproducir_explosion()
 
-                # Actualizo el enemigo
                 self.enemy.update(dt, self.player, self.map, self.bombas)
-
-                # Verifico si alguien ganó o perdió
                 self.verificar_colisiones()
 
-                # Dibujar todo
                 self.screen.fill((30, 30, 30))
                 self.map.draw(self.screen)
 
