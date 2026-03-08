@@ -3,6 +3,7 @@ import pygame
 from scripts.player import Player
 from scripts.map import Map
 from scripts.bomb import Bomb
+from scripts.enemy import Enemy
 
 class Game:
     def __init__(self):
@@ -16,6 +17,9 @@ class Game:
         self.map = Map(self.tile_size)
         self.player = Player(45, 45, 36)
         self.bombas = []  # aquí guardo todas las bombas activas
+
+        # Aquí creo el enemigo en la esquina opuesta al jugador
+        self.enemy = Enemy(680, 480, self.tile_size)
 
     def run(self):
         while self.running:
@@ -40,6 +44,9 @@ class Game:
             for bomba in self.bombas:
                 bomba.update(dt, self.map)
 
+            # Actualizo el enemigo
+            self.enemy.update(dt, self.player, self.map, self.bombas)
+
             # Dibujar fondo
             self.screen.fill((30, 30, 30))
             self.map.draw(self.screen)
@@ -48,10 +55,13 @@ class Game:
             for bomba in self.bombas:
                 bomba.draw(self.screen)
 
-            # Dibujar jugador (Una sola vez, fuera del grid)
+            # Dibujo el enemigo
+            self.enemy.draw(self.screen)
+
+            # Dibujar jugador
             self.player.draw(self.screen)
 
             pygame.display.flip()
-            self.clock.tick(60)  # Solo una vez
+            self.clock.tick(60)
 
         pygame.quit()
