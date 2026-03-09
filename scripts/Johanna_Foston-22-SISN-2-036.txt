@@ -1,0 +1,4 @@
+Nombre: Johanna Foston
+Matricula: 22-SISN-2-036
+Repositorio: https://github.com/johannafoston25/Juego-Bomberman-IA
+Video: 
