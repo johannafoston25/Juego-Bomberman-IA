@@ -19,10 +19,9 @@ class Enemy:
         self.arbol = ArbolComportamiento()
         self.camino = []
 
-        # Dibujo el enemigo con un color rojo simple
-        self.image = pygame.Surface((tile_size - 4, tile_size - 4), pygame.SRCALPHA)
-        pygame.draw.rect(self.image, (220, 50, 50), (0, 0, tile_size - 4, tile_size - 4), border_radius=6)
-        pygame.draw.circle(self.image, (255, 220, 180), ((tile_size - 4) // 2, (tile_size - 4) // 4), (tile_size - 4) // 4)
+       # Aquí cargo la imagen del enemigo
+        self.image = pygame.image.load("assets/images/enemy.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image, (tile_size - 4, tile_size - 4))
 
     def update(self, dt, jugador, mapa, bombas):
         self.move_timer += dt

@@ -8,10 +8,9 @@ class Player:
         self.size = size
         self.speed = 4
 
-        # Creamos un sprite simple con color hasta tener imagen
-        self.image = pygame.Surface((size, size), pygame.SRCALPHA)
-        pygame.draw.rect(self.image, (0, 150, 255), (0, 0, size, size), border_radius=6)
-        pygame.draw.circle(self.image, (255, 220, 180), (size // 2, size // 3), size // 4)  # cabeza
+        # Aquí cargo la imagen del jugador
+        self.image = pygame.image.load("assets/images/player.png").convert_alpha()
+        self.image = pygame.transform.scale(self.image, (size, size))
 
     def move(self, keys, screen_width, screen_height, mapa, tile_size):
         nueva_x = self.x
@@ -50,7 +49,7 @@ class Player:
         if puede_mover_y:
             self.y = nueva_y
 
-        # Evita salirse de la pantalla
+        # Aqui evita salirse de la pantalla
         self.x = max(0, min(self.x, screen_width - self.size))
         self.y = max(0, min(self.y, screen_height - self.size))
 

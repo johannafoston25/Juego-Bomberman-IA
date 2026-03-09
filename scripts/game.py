@@ -38,7 +38,7 @@ class Game:
         self.map = Map(self.tile_size)
         self.player = Player(self.tile_size + 5, self.tile_size + 5, self.tile_size - 4)
         self.bombas = []
-        self.enemy = Enemy(self.tile_size * 17, self.tile_size * 12, self.tile_size)
+        self.enemy = Enemy(self.tile_size * 10, self.tile_size * 8, self.tile_size)
 
     def verificar_colisiones(self):
         # Verifico si el enemigo tocó al jugador
