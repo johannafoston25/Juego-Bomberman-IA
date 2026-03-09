@@ -19,7 +19,7 @@ class Enemy:
         self.arbol = ArbolComportamiento()
         self.camino = []
 
-       # Aquí cargo la imagen del enemigo
+        # Aquí cargo la imagen del enemigo
         self.image = pygame.image.load("assets/images/enemy.png").convert_alpha()
         self.image = pygame.transform.scale(self.image, (tile_size - 4, tile_size - 4))
 
