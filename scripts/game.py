@@ -123,7 +123,7 @@ class Game:
                 self.enemy.update(dt, self.player, self.map, self.bombas)
                 self.verificar_colisiones()
 
-                self.screen.fill((30, 30, 30))
+                self.screen.fill((15, 80, 15))
                 self.map.draw(self.screen)
 
                 for bomba in self.bombas:

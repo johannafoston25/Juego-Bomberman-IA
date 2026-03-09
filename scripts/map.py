@@ -27,9 +27,9 @@ class Map:
 
         # Colores de cada tile
         self.colores = {
-            0: (80, 80, 80),    # piso
-            1: (40, 40, 40),    # pared fija
-            2: (160, 100, 50),  # bloque destructible
+           0: (34, 139, 34),    # piso verde
+           1: (40, 40, 40),     # pared fija
+           2: (160, 100, 50),   # bloque destructible
         }
 
     def draw(self, screen):
