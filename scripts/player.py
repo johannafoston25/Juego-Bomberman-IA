@@ -7,6 +7,7 @@ class Player:
         self.y = y
         self.size = size
         self.speed = 4
+        self.vidas = 3 #Aqui defino las vidas del jugador
 
         # Aquí cargo la imagen del jugador
         self.image = pygame.image.load("assets/images/player.png").convert_alpha()
@@ -25,23 +26,33 @@ class Player:
         if keys[pygame.K_DOWN]:
             nueva_y += self.speed
 
-        # Revisamos las 4 esquinas del jugador para detectar colisión
-        esquinas = [
-            (nueva_x, nueva_y),
-            (nueva_x + self.size - 1, nueva_y),
-            (nueva_x, nueva_y + self.size - 1),
-            (nueva_x + self.size - 1, nueva_y + self.size - 1)
-        ]
-
         # Verificamos si alguna esquina choca con pared
         puede_mover_x = True
         puede_mover_y = True
 
-        for (ex, ey) in esquinas:
+        esquinas_x = [
+            (nueva_x, self.y),
+            (nueva_x + self.size - 1, self.y),
+            (nueva_x, self.y + self.size - 1),
+            (nueva_x + self.size - 1, self.y + self.size - 1)
+        ]
+        esquinas_y = [
+            (self.x, nueva_y),
+            (self.x + self.size - 1, nueva_y),
+            (self.x, nueva_y + self.size - 1),
+            (self.x + self.size - 1, nueva_y + self.size - 1)
+        ]
+
+        for (ex, ey) in esquinas_x:
             col = int(ex // tile_size)
             row = int(ey // tile_size)
             if mapa.es_pared(row, col):
                 puede_mover_x = False
+
+        for (ex, ey) in esquinas_y:
+            col = int(ex // tile_size)
+            row = int(ey // tile_size)
+            if mapa.es_pared(row, col):
                 puede_mover_y = False
 
         if puede_mover_x:

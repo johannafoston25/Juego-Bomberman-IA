@@ -13,7 +13,7 @@ class Enemy:
         self.y = self.row * tile_size
         self.speed = 2
         self.move_timer = 0
-        self.move_delay = 500  # se mueve cada 500ms
+        self.move_delay = 800  # se mueve cada 800ms
 
         # Aquí creo el árbol de comportamiento y el A*
         self.arbol = ArbolComportamiento()

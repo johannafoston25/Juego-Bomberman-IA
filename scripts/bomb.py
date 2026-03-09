@@ -12,7 +12,7 @@ class Bomb:
         self.x = self.col * tile_size
         self.y = self.row * tile_size
 
-        self.timer = 3000        # explota en 3 segundos
+        self.timer = 1000        # explota en 1 segundos
         self.explotada = False
         self.radio = 2           # cuántos tiles alcanza la explosión
         self.explosion_timer = 500  # la explosión dura 0.5 segundos

@@ -21,7 +21,7 @@ class Game:
         self.ancho = self.screen.get_width()
         self.alto = self.screen.get_height()
 
-       # Aquí calculo el tile_size para que el mapa llene toda la pantalla
+        # Aquí calculo el tile_size para que el mapa llene toda la pantalla
         self.tile_size = max(self.ancho // 20, self.alto // 15)
 
         self.menu = Menu(self.screen)
@@ -36,7 +36,7 @@ class Game:
     def iniciar_juego(self):
         # Aquí reinicio todos los elementos del juego
         self.map = Map(self.tile_size)
-        self.player = Player(self.tile_size + 5, self.tile_size + 5, self.tile_size - 4)
+        self.player = Player(self.tile_size + 5, self.tile_size + 5, self.tile_size - 15)
         self.bombas = []
         self.enemy = Enemy(self.tile_size * 10, self.tile_size * 8, self.tile_size)
 
@@ -46,9 +46,14 @@ class Game:
         enemigo_rect = pygame.Rect(self.enemy.x, self.enemy.y, self.tile_size - 4, self.tile_size - 4)
 
         if jugador_rect.colliderect(enemigo_rect):
-            self.gano = False
+            self.player.vidas -= 1
             self.sonidos.reproducir_gameover()
-            self.estado = "gameover"
+            # Aquí regreso al jugador a su posición inicial
+            self.player.x = self.tile_size + 5
+            self.player.y = self.tile_size + 5
+            if self.player.vidas <= 0:
+                self.gano = False
+                self.estado = "gameover"
 
         # Verifico si la explosión tocó al jugador o al enemigo
         for bomba in self.bombas:
@@ -57,13 +62,18 @@ class Game:
                     jugador_row = self.player.y // self.tile_size
                     jugador_col = self.player.x // self.tile_size
                     if r == jugador_row and c == jugador_col:
-                        self.gano = False
+                        self.player.vidas -= 1
                         self.sonidos.reproducir_gameover()
-                        self.estado = "gameover"
+                        # Aquí regreso al jugador a su posición inicial
+                        self.player.x = self.tile_size + 5
+                        self.player.y = self.tile_size + 5
+                        if self.player.vidas <= 0:
+                            self.gano = False
+                            self.estado = "gameover"
 
+                    # Si la explosión toca al enemigo el jugador gana
                     if r == self.enemy.row and c == self.enemy.col:
                         self.gano = True
-                        self.sonidos.reproducir_gameover()
                         self.estado = "gameover"
 
     def run(self):
@@ -131,6 +141,11 @@ class Game:
 
                 self.enemy.draw(self.screen)
                 self.player.draw(self.screen)
+                
+                # Aquí muestro las vidas del jugador en pantalla
+                fuente = pygame.font.SysFont("Arial", 30, bold=True)
+                vidas_texto = fuente.render(f"Vidas: {self.player.vidas}", True, (255, 255, 255))
+                self.screen.blit(vidas_texto, (10, 10))
 
                 pygame.display.flip()
                 self.clock.tick(60)
