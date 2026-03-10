@@ -8,6 +8,6 @@ def main():
     game = Game() # Aqui creo la instacia del juego
     game.run()    # Aqui arranco el loop principal
 
-# Aquí verifico que el archivo se ejecute directamente y no como módulo
+
 if __name__ == "__main__":
     main()

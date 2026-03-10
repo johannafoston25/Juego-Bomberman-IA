@@ -10,7 +10,7 @@ class Nodo:
     def ejecutar(self, enemigo, jugador, mapa, bombas):
         pass
 
-# --- Nodos de control ---
+# Nodos de control 
 
 class Secuencia(Nodo):
     # Ejecuta los hijos en orden, si uno falla para todo
@@ -36,7 +36,7 @@ class Selector(Nodo):
                 return EXITO
         return FALLO
 
-# --- Nodos de acción ---
+# Nodos de acción
 
 class HuirDeBomba(Nodo):
     # Me alejo si hay una bomba cerca

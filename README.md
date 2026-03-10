@@ -49,4 +49,4 @@ proyecto/
 ├── requirements.txt
 └── README.md
 ## Video
-[enlace al video de YouTube aquí]
+[https://youtu.be/qaANPOCK6nw?si=4uzSfUry2qSuq72l]
